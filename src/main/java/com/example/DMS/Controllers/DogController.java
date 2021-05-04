@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.DMS.Models.Dog;
+import com.example.DMS.Models.Trainer;
 import com.example.DMS.repository.DogRepository;
+import com.example.DMS.repository.TrainerRepository;
 
 
 @Controller
@@ -18,6 +21,8 @@ public class DogController {
 	ModelAndView mv = new ModelAndView();
 	@Autowired
 	DogRepository dogRepo;
+	@Autowired
+	TrainerRepository trainerRepo;
 	
 //	@RequestMapping("dogHome") 
 //	public String home() {
@@ -31,15 +36,33 @@ public class DogController {
 	@RequestMapping("add")
 	public ModelAndView add () {
 		mv.setViewName("addNewDog.html");
+		Iterable<Trainer> trainerList = trainerRepo.findAll();
+		mv.addObject("trainers", trainerList);
 		return mv;
 	}
 	
 	@RequestMapping("addNewDog")
-	public ModelAndView addNewDog (Dog dog) {
+	public ModelAndView addNewDog (Dog dog, @RequestParam("trainerId") int id) {
+		 Trainer trainer = trainerRepo.findById(id).orElse(new Trainer());	
+		 dog.setTrainer(trainer);
 		dogRepo.save(dog);
 		mv.setViewName("home");
 		return mv;
 	}
+	
+	@RequestMapping("addTrainer")
+	public ModelAndView addTrainer() {
+		mv.setViewName("addNewTrainer");
+		return mv;		
+	}
+	
+	@RequestMapping("trainerAdded")
+	public ModelAndView addNewTrainer(Trainer trainer) {
+		trainerRepo.save(trainer);
+		mv.setViewName("home");
+		return mv;
+	}
+	
 	
 	@RequestMapping("viewModifyDelete")
 	public ModelAndView viewDogs(Dog dog) {
@@ -85,5 +108,7 @@ public class DogController {
 		mv.setViewName("searchResults");
 		return mv;
 	}
+	
+	
 		
 }
