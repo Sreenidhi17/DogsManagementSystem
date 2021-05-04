@@ -66,12 +66,24 @@ public class DogController {
 //		return home();
 		
 		//based on name
+//		
+//		List<Dog> dogsFound= dogRepo.findByName(dog.getName());
+//		for(Dog d : dogsFound) {
+//			dogRepo.delete(d);
+//		}
+//		return home();
 		
-		List<Dog> dogsFound= dogRepo.findByName(dog.getName());
-		for(Dog d : dogsFound) {
-			dogRepo.delete(d);
-		}
+		Dog d = dogRepo.findById(dog.getId()).orElse(new Dog());
+		dogRepo.delete(d);
 		return home();
+	}
+	
+	@RequestMapping("search")
+	public ModelAndView searchById(int id) {
+		Dog dogFound = dogRepo.findById(id).orElse(new Dog());
+		mv.addObject(dogFound);
+		mv.setViewName("searchResults");
+		return mv;
 	}
 		
 }
