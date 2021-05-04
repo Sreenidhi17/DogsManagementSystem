@@ -28,11 +28,11 @@ public class DogController {
 //	public String home() {
 //		return "home";
 //	}
-	@RequestMapping("dogHome") 
-	public ModelAndView home() {
-		mv.setViewName("home");
-		return mv;
-	}
+//	@RequestMapping("dogHome") 
+//	public ModelAndView home() {
+//		mv.setViewName("home");
+//		return mv;
+//	}
 	@RequestMapping("add")
 	public ModelAndView add () {
 		mv.setViewName("addNewDog.html");
